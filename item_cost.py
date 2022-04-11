@@ -16,7 +16,7 @@ def run(sample_urls):
         json = retrieve_json(url)
         name = json['name']
         cost = evaluate_cost(json)
-        print("Case {}: Cost of item '{}' is {} units.".format(sample_number, name, cost))
+        print("Sample {}: Cost of item '{}' is {} units.".format(sample_number, name, cost))
 
 
 def retrieve_json(url):
@@ -28,15 +28,16 @@ def retrieve_json(url):
 def evaluate_cost(json):
     item_cost = 0
     for item in json['items']:
-        if is_part(item):
-            item_cost += item['price'] * item['count']
+        if is_item_part(item):
+            item_part_value = item['price'] * item['count']
+            item_cost += item_part_value
         else:
             item_cost += evaluate_cost(item)
     item_cost *= json['count']
     return item_cost
 
 
-def is_part(item):
+def is_item_part(item):
     try:
         item['price']
     except KeyError:
